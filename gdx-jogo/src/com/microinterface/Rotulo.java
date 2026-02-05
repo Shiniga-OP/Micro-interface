@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Rotulo extends Componente {
     public String texto;
-    private BitmapFont fonte;
-    private GlyphLayout medidor;
-    private float escala;
+    public BitmapFont fonte;
+    public GlyphLayout medidor;
+    public float escala;
 
     public Rotulo(String texto, BitmapFont fonte, float escala) {
         super(0, 0, 0, 0);
@@ -24,9 +24,13 @@ public class Rotulo extends Componente {
         fonte.getData().setScale(escala);
         medidor.setText(fonte, texto);
 
+        // posição absoluta do componente
+        float desenharX = paiX + x;
+        float desenharY = paiY + y;
+
         // centraliza com base no tamanho escalonado
-        float posX = paiX + (largura / 2) - (medidor.width / 2);
-        float posY = paiY + (altura / 2) + (medidor.height / 2);
+        float posX = desenharX + (largura / 2) - (medidor.width / 2);
+        float posY = desenharY + (altura / 2) + (medidor.height / 2);
 
         fonte.draw(pincel, texto, posX, posY);
 
@@ -34,3 +38,4 @@ public class Rotulo extends Componente {
         fonte.getData().setScale(1.0f);
     }
 }
+

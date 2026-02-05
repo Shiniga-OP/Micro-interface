@@ -7,11 +7,11 @@ import com.badlogic.gdx.utils.Array;
 
 public class RotuloMultilinha extends Componente {
     public String texto;
-    private BitmapFont fonte;
-    private GlyphLayout medidor;
-    private float escala;
-    private Array<String> linhas;
-    private float alturaLinha;
+    public BitmapFont fonte;
+    public GlyphLayout medidor;
+    public float escala;
+    public Array<String> linhas;
+    public float alturaLinha;
 
     public RotuloMultilinha(String texto, BitmapFont fonte, float escala) {
         super(0, 0, 0, 0);
@@ -22,7 +22,7 @@ public class RotuloMultilinha extends Componente {
         this.linhas = new Array<String>();
     }
 
-    private void quebrarTexto() {
+    public void quebrarTexto() {
         linhas.clear();
 
         if(largura <= 0) {

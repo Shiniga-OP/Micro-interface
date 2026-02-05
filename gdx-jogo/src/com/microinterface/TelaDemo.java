@@ -50,15 +50,14 @@ public class TelaDemo implements Screen, InputProcessor {
             visualJanela = new PainelFatiado(textura);
             visualBotao = new PainelFatiado(textura);
 
-            construirInterface();
-
+            criarInterface();
         } catch(Exception e) {
             Gdx.app.log("ERRO", "Recursos nao encontrados: " + e.getMessage());
         }
         Gdx.input.setInputProcessor(this);
     }
 
-    public void construirInterface() {
+    public void criarInterface() {
         final float larguraTela = Gdx.graphics.getWidth();
         final float alturaTela = Gdx.graphics.getHeight();
 
@@ -91,7 +90,6 @@ public class TelaDemo implements Screen, InputProcessor {
                 dialogoConfirmacao.mostrar("Confirma?", "Deseja sair?", callback);
             }
         };
-
         Botao botaoDialogo = new Botao("Dialogo", visualBotao, fonte, 0, 0, 180, 50, escalaPixel, acaoDialogo);
         painelBotoes.addAncorado(botaoDialogo, Ancoragem.SUPERIOR_ESQUERDO, 0, 0);
 
@@ -103,7 +101,7 @@ public class TelaDemo implements Screen, InputProcessor {
             }
         };
 
-        Botao botaoInput = new Botao("Input", visualBotao, fonte, 0, 0, 180, 50, escalaPixel, acaoInput);
+        Botao botaoInput = new Botao("Entrada", visualBotao, fonte, 0, 0, 180, 50, escalaPixel, acaoInput);
         painelBotoes.addAncorado(botaoInput, Ancoragem.SUPERIOR_DIREITO, 0, 0);
 
         Acao acaoTeste = new Acao() {
@@ -112,7 +110,6 @@ public class TelaDemo implements Screen, InputProcessor {
                 Gdx.app.log("INFO", "Botao teste clicado!");
             }
         };
-
         Botao botaoTeste = new Botao("Teste", visualBotao, fonte, 0, 0, 180, 50, escalaPixel, acaoTeste);
         painelBotoes.addAncorado(botaoTeste, Ancoragem.CENTRO, 0, 0);
 
@@ -122,7 +119,6 @@ public class TelaDemo implements Screen, InputProcessor {
                 campoNome.texto = "";
             }
         };
-
         Botao botaoLimpar = new Botao("Limpar", visualBotao, fonte, 0, 0, 120, 50, escalaPixel, acaoLimpar);
         painelBotoes.addAncorado(botaoLimpar, Ancoragem.INFERIOR_ESQUERDO, 0, 0);
 
@@ -166,7 +162,6 @@ public class TelaDemo implements Screen, InputProcessor {
                 dialogoEntrada.aoTocar(0, 0, false);
             }
         };
-
         dialogoEntrada.adicionarBotao("OK", visualBotao, Ancoragem.CENTRO_DIREITO, -10, acaoConfirmar);
 
         Acao acaoCancelar = new Acao() {
@@ -192,43 +187,43 @@ public class TelaDemo implements Screen, InputProcessor {
         gerenciadorUI.desenhar(pincel, delta);
         pincel.end();
     }
-
-    public boolean touchDown(int x, int y, int pointer, int button) {
+	@Override
+    public boolean touchDown(int x, int y, int p, int b) {
         camera.unproject(toqueAuxiliar.set(x, y, 0));
         gerenciadorUI.processarToque(toqueAuxiliar.x, toqueAuxiliar.y, true);
         return true;
     }
-
-    public boolean touchUp(int x, int y, int pointer, int button) {
+	@Override
+    public boolean touchUp(int x, int y, int p, int b) {
         camera.unproject(toqueAuxiliar.set(x, y, 0));
         gerenciadorUI.processarToque(toqueAuxiliar.x, toqueAuxiliar.y, false);
         return true;
     }
-
-    public boolean touchDragged(int x, int y, int pointer) {
+	@Override
+    public boolean touchDragged(int x, int y, int p) {
         camera.unproject(toqueAuxiliar.set(x, y, 0));
         gerenciadorUI.processarArraste(toqueAuxiliar.x, toqueAuxiliar.y);
         return true;
     }
-
-    public boolean keyDown(int keycode) {
-        return gerenciadorUI.processarTecla(keycode);
+	@Override
+    public boolean keyDown(int c) {
+        return gerenciadorUI.processarTecla(c);
     }
-
-    public boolean keyTyped(char character) {
-        return gerenciadorUI.processarCaractere(character);
+	@Override
+    public boolean keyTyped(char c) {
+        return gerenciadorUI.processarCaractere(c);
     }
-
-    public void resize(int width, int height) {
-        vista.update(width, height);
+	@Override
+    public void resize(int v, int h) {
+        vista.update(v, h);
     }
-
+	@Override
     public void dispose() {
         pincel.dispose();
         pincelFormas.dispose();
         fonte.dispose();
     }
-
+	@Override
     public void pause() {}
     public void resume() {}
     public void hide() {}
