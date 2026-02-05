@@ -1,0 +1,4 @@
+/storage/emulated/0/AideProjects/MicroInterface/gdx-android/bin/intermediates/jardex/4388e15f22dc8b01b87aa7ce66513474/gdx-box2d-1.11.0.jar.dex.zip
+/storage/emulated/0/AideProjects/MicroInterface/gdx-android/bin/intermediates/jardex/30930d21b4a7897040972ccfb05057b9/gdx-jnigen-loader-2.5.2.jar.dex.zip
+/storage/emulated/0/AideProjects/MicroInterface/gdx-android/bin/intermediates/jardex/d42f7e95acddb902d2c61a6ca19243b3/gdx-backend-android-1.11.0.jar.dex.zip
+/storage/emulated/0/AideProjects/MicroInterface/gdx-android/bin/intermediates/jardex/07057deb6070cf9fd12f0c0d0bf549b9/gdx-1.11.0.jar.dex.zip

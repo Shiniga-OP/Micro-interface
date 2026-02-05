@@ -1,0 +1,2 @@
+# Referenced at /storage/emulated/0/AideProjects/MicroInterface/gdx-android/AndroidManifest.xml:6
+-keep class com.microinterface.MainActivity { <init>(); }
