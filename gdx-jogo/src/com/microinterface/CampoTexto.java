@@ -20,9 +20,13 @@ public class CampoTexto extends Componente {
     public GlyphLayout medidor;
     public float margemInterna = 10;
 
+    // pra notificar o gerenciador quando ganhar foco
+    public GerenciadorUI gerenciador = null;
+
     public interface Texto {
         void aoMudar(String novoTexto);
     }
+
     public Texto mudanca;
 
     public CampoTexto(PainelFatiado visual, BitmapFont fonte, float x, float y, float largura, float altura, float escala) {
@@ -43,14 +47,21 @@ public class CampoTexto extends Componente {
     public void defFoco(boolean foco) {
         this.emFoco = foco;
         if(foco) {
+            // notifica o gerenciador que esse campo ta em foco
+            if(gerenciador != null) {
+                gerenciador.defFocoTexto(this);
+            }
+            // força o teclado a aparecer
             Gdx.input.setOnscreenKeyboardVisible(true);
+        } else {
+            Gdx.input.setOnscreenKeyboardVisible(false);
         }
     }
 
     public boolean aoTocar(float toqueX, float toqueY, boolean pressionado) {
         if(contem(toqueX, toqueY) && !pressionado) {
             emFoco = true;
-            Gdx.input.setOnscreenKeyboardVisible(true);
+            defFoco(true);
             return true;
         }
         return false;
@@ -62,7 +73,7 @@ public class CampoTexto extends Componente {
         if(c == Input.Keys.BACKSPACE && texto.length() > 0) {
             String antigoTexto = texto;
             texto = texto.substring(0, texto.length() - 1);
-            if (mudanca != null && !antigoTexto.equals(texto)) {
+            if(mudanca != null && !antigoTexto.equals(texto)) {
                 mudanca.aoMudar(texto);
             }
             return true;
@@ -77,7 +88,7 @@ public class CampoTexto extends Componente {
 
     public boolean processarCaractere(char caractere) {
         if(!emFoco) return false;
-
+		
         if(caractere >= 32 && caractere <= 126 && texto.length() < limiteCaracteres) {
             String antigoTexto = texto;
             texto += caractere;
@@ -150,11 +161,11 @@ public class CampoTexto extends Componente {
         }
         fonte.getData().setScale(1.0f);
     }
-
+	
 	@Override
 	public void liberar() {
 		super.liberar();
 		fonte.dispose();
-	} 
+	}
 }
 

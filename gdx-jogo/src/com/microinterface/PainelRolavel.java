@@ -47,6 +47,11 @@ public class PainelRolavel extends Painel {
         pixmap.dispose();
     }
 
+    @Override
+    public boolean capturaArraste() {
+        return true; // PainelRolavel precisa receber eventos de arraste
+    }
+
     // define a altura total do conteudo, isso depois de adicionar todos os filhos
     public void defAlturaConteudo(float alturaConteudo) {
         this.alturaConteudo = alturaConteudo;
@@ -97,7 +102,7 @@ public class PainelRolavel extends Painel {
     // obtem a posicao atual da barra(0 a 1)
     public float obterPosicaoBarra() {
         if(!precisaRolagem()) return 0;
-        
+
         float alturaVisivel = altura - espacoSuperior - espacoInferior;
         float maxDeslocamento = alturaConteudo - alturaVisivel;
         return maxDeslocamento > 0 ? deslocamentoY / maxDeslocamento : 0;
@@ -106,7 +111,7 @@ public class PainelRolavel extends Painel {
     // obtem a altura da barra em relacao a area total
     public float obterAlturaBarra() {
         if(!precisaRolagem()) return 0;
-			
+
         float alturaVisivel = altura - espacoSuperior - espacoInferior;
         float proporcaoVisivel = alturaVisivel / alturaConteudo;
         float alturaAreaBarra = altura - margemBarra * 2;
@@ -159,7 +164,7 @@ public class PainelRolavel extends Painel {
 		}
 		return filhoCapturou || contem(toqueX, toqueY);
 	}
-	
+
 	@Override
 	public void add(Componente filho) {
 		filhos.add(filho);
@@ -218,11 +223,10 @@ public class PainelRolavel extends Painel {
 		}
 	}
 	@Override
-    public void liberar() {
+	public void liberar() {
 		super.liberar();
-        if(pixelBranco != null) {
-            pixelBranco.dispose();
-        }
-    }
+		pixelBranco.dispose();
+		
+	}
 }
 
