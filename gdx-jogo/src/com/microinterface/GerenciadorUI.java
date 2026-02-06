@@ -24,12 +24,6 @@ public class GerenciadorUI {
         dialogos.remove(dialogo);
     }
 
-    public void limpar() {
-        componentes.clear();
-        dialogos.clear();
-        campoEmFoco = null;
-    }
-
     public void defFocoTexto(CampoTexto campo) {
         if(campoEmFoco != null && campoEmFoco != campo) {
             campoEmFoco.defFoco(false);
@@ -66,13 +60,24 @@ public class GerenciadorUI {
     }
 
     public void processarArraste(float x, float y) {
-        for(int i = dialogos.size() - 1; i >= 0; i--) {
-            CaixaDialogo dialogo = dialogos.get(i);
-            if(dialogo.ativa) {
-                dialogo.aoArrastar(x, y);
-            }
-        }
-    }
+		// 1. primeiro verifica os dialogos(eles tem prioridade)
+		for(int i = dialogos.size() - 1; i >= 0; i--) {
+			CaixaDialogo dialogo = dialogos.get(i);
+			if(dialogo.ativa) {
+				dialogo.aoArrastar(x, y);
+			}
+		}
+		// 2. procura qual componente ta embaixo do dedo
+		for(int i = componentes.size() - 1; i >= 0; i--) {
+			Componente c = componentes.get(i);
+
+			// so envia o comando se o dedo estiver dentro do componente
+			if(c.contem(x, y)) { 
+				c.aoTocar(x, y, true);
+				break; // pra no primeiro que encontrar pra não mover o que ta atras
+			}
+		}
+	}
 
     public boolean processarTecla(int keycode) {
         if(campoEmFoco != null) {
@@ -108,4 +113,16 @@ public class GerenciadorUI {
         }
         return false;
     }
+	
+	public void liberar() {
+		for(Componente c : componentes) {
+			c.liberar();
+		}
+		componentes.clear();
+		for(CaixaDialogo d : dialogos) {
+			d.liberar();
+		}
+		dialogos.clear();
+		campoEmFoco = null;
+	}
 }

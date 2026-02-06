@@ -156,5 +156,13 @@ public class CaixaDialogo extends Componente {
         rotulomsg.desenhar(pincel, delta, desenharX, desenharY);
         painelBotoes.desenhar(pincel, delta, desenharX, desenharY);
     }
+	
+	@Override
+	public void liberar() {
+		super.liberar();
+		fonte.dispose();
+		rotuloTitulo.liberar();
+		rotulomsg.liberar();
+	}
 }
 

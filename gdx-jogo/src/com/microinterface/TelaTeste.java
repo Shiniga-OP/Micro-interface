@@ -250,6 +250,7 @@ public class TelaTeste implements Screen, InputProcessor {
         pincel.dispose();
         pincelFormas.dispose();
         fonte.dispose();
+		gerenciadorUI.liberar();
     }
 	@Override
     public void pause() {}

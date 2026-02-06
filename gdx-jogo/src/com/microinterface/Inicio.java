@@ -5,7 +5,7 @@ import com.badlogic.gdx.Game;
 public class Inicio extends Game {
     @Override
     public void create() {
-        setScreen(new TelaTeste());
+        setScreen(new TestePainelRolavel());
     }
 
     @Override

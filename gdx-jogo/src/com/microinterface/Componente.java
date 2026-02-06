@@ -32,4 +32,9 @@ public abstract class Componente {
             filho.desenhar(pincel, delta, atualX, atualY);
         }
     }
+	
+	public void liberar() {
+		for(Componente c : filhos) c.liberar();
+		filhos.clear();
+	}
 }
