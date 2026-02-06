@@ -38,29 +38,12 @@ public class GerenciadorUI {
     }
 
     public boolean processarToque(float x, float y, boolean pressionado) {
-        // primeiro verificar dialogos(prioridade)
         for(int i = dialogos.size() - 1; i >= 0; i--) {
             CaixaDialogo dialogo = dialogos.get(i);
-            if(dialogo.ativa) {
-                // verificar se tocou em um CampoTexto dentro do dialogo
-                for(Componente comp : dialogo.componentes) {
-                    if(comp instanceof CampoTexto) {
-                        CampoTexto campo = (CampoTexto) comp;
-                        float campoXGlobal = dialogo.x + campo.x;
-                        float campoYGlobal = dialogo.y + campo.y;
-                        if(x >= campoXGlobal && x <= campoXGlobal + campo.largura &&
-                           y >= campoYGlobal && y <= campoYGlobal + campo.altura && !pressionado) {
-                            defFocoTexto(campo);
-                        }
-                    }
-                }
-
-                if(dialogo.aoTocar(x, y, pressionado)) {
-                    return true;
-                }
+            if(dialogo.ativa && dialogo.aoTocar(x, y, pressionado)) {
+                return true;
             }
         }
-        // depois verificar componentes normais
         for(int i = componentes.size() - 1; i >= 0; i--) {
             Componente comp = componentes.get(i);
 
@@ -72,29 +55,8 @@ public class GerenciadorUI {
             }
             if(comp.aoTocar(x, y, pressionado)) return true;
         }
-        // se tocou fora de qualquer campo, remover o foco
         if(!pressionado && campoEmFoco != null) {
-            boolean tocouNoCampo = false;
-
-            // verificar se tocou no campo ativo(pode ta em um dialogo)
-            for(CaixaDialogo dialogo : dialogos) {
-                if(dialogo.ativa) {
-                    for(Componente comp : dialogo.componentes) {
-                        if(comp == campoEmFoco) {
-                            float campoXGlobal = dialogo.x + campoEmFoco.x;
-                            float campoYGlobal = dialogo.y + campoEmFoco.y;
-                            tocouNoCampo = x >= campoXGlobal && x <= campoXGlobal + campoEmFoco.largura &&
-								y >= campoYGlobal && y <= campoYGlobal + campoEmFoco.altura;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if(!tocouNoCampo) {
-                tocouNoCampo = campoEmFoco.contem(x, y);
-            }
-
+            boolean tocouNoCampo = campoEmFoco.contem(x, y);
             if(!tocouNoCampo) {
                 campoEmFoco.defFoco(false);
                 campoEmFoco = null;
@@ -147,4 +109,3 @@ public class GerenciadorUI {
         return false;
     }
 }
-

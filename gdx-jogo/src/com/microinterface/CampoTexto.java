@@ -44,34 +44,14 @@ public class CampoTexto extends Componente {
     public void defFoco(boolean foco) {
         this.emFoco = foco;
         if(foco) {
-            // força o teclado a aparecer
             Gdx.input.setOnscreenKeyboardVisible(true);
-            // aguarda um frame e tenta novamente
-            new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(100);
-							Gdx.app.postRunnable(new Runnable() {
-									@Override
-									public void run() {
-										Gdx.input.setOnscreenKeyboardVisible(true);
-									}
-								});
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}).start();
-        } else {
-            Gdx.input.setOnscreenKeyboardVisible(false);
         }
     }
 
     public boolean aoTocar(float toqueX, float toqueY, boolean pressionado) {
         if(contem(toqueX, toqueY) && !pressionado) {
             emFoco = true;
-            defFoco(true);
+            Gdx.input.setOnscreenKeyboardVisible(true);
             return true;
         }
         return false;
@@ -83,7 +63,7 @@ public class CampoTexto extends Componente {
         if(c == Input.Keys.BACKSPACE && texto.length() > 0) {
             String antigoTexto = texto;
             texto = texto.substring(0, texto.length() - 1);
-            if(mudanca != null && !antigoTexto.equals(texto)) {
+            if (mudanca != null && !antigoTexto.equals(texto)) {
                 mudanca.aoMudar(texto);
             }
             return true;

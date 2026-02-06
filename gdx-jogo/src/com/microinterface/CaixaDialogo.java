@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CaixaDialogo extends Componente {
     public PainelFatiado visual;
@@ -20,7 +18,6 @@ public class CaixaDialogo extends Componente {
     public Rotulo rotuloTitulo;
     public RotuloMultilinha rotulomsg;
     public Painel painelBotoes;
-    public List<Componente> componentes = new ArrayList<Componente>();
 
     public boolean arrastando = false;
     public float toqueInicialX;
@@ -90,13 +87,9 @@ public class CaixaDialogo extends Componente {
         painelBotoes.addAncorado(botaoCancelar, Ancoragem.CENTRO_ESQUERDO, 10, 0);
     }
 
-    public void addBotao(String texto, PainelFatiado visualBotao, Ancoragem ancoragem, float margemX, Acao acao) {
+    public void adicionarBotao(String texto, PainelFatiado visualBotao, Ancoragem ancoragem, float margemX, Acao acao) {
         Botao botao = new Botao(texto, visualBotao, fonte, 0, 0, 120, 40, escala, acao);
         painelBotoes.addAncorado(botao, ancoragem, margemX, 0);
-    }
-
-    public void add(Componente componente) {
-        componentes.add(componente);
     }
 
     public void fechar(boolean confirmou) {
@@ -130,12 +123,6 @@ public class CaixaDialogo extends Componente {
         if(!pressionado) {
             arrastando = false;
         }
-        // processa toques nos componentes filhos
-        for(Componente comp : componentes) {
-            if(comp.aoTocar(toqueX - x, toqueY - y, pressionado)) {
-                return true;
-            }
-        }
         if(painelBotoes.aoTocar(toqueX - x, toqueY - y, pressionado)) {
             return true;
         }
@@ -167,11 +154,6 @@ public class CaixaDialogo extends Componente {
         visual.desenhar(pincel, desenharX, desenharY, largura, altura, escala);
         painelTitulo.desenhar(pincel, delta, desenharX, desenharY);
         rotulomsg.desenhar(pincel, delta, desenharX, desenharY);
-
-        // desenha componentes filhos
-        for(Componente comp : componentes) {
-            comp.desenhar(pincel, delta, desenharX, desenharY);
-        }
         painelBotoes.desenhar(pincel, delta, desenharX, desenharY);
     }
 }

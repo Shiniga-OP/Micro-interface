@@ -55,10 +55,12 @@ public class TelaDemo implements Screen, InputProcessor {
             Gdx.app.log("ERRO", "Recursos nao encontrados: " + e.getMessage());
         }
         Gdx.input.setInputProcessor(this);
-		Gdx.input.setOnscreenKeyboardVisible(true);
     }
 
     public void criarInterface() {
+        final float larguraTela = Gdx.graphics.getWidth();
+        final float alturaTela = Gdx.graphics.getHeight();
+
         Janela janelaPrincipal = new Janela(visualJanela, -300, -150, 600, 300, escalaPixel);
 
         Rotulo titulo = new Rotulo("DEMO", fonte, escalaPixel);
@@ -73,14 +75,8 @@ public class TelaDemo implements Screen, InputProcessor {
 
         Acao acaoDialogo = new Acao() {
             public void exec() {
-                // usa a posição da camera pra centralizar corretamente
-                float centroX = camera.position.x;
-                float centroY = camera.position.y;
-
-                dialogoConfirmacao.x = centroX - dialogoConfirmacao.largura / 2;
-                dialogoConfirmacao.y = centroY - dialogoConfirmacao.altura / 2;
-
-                CaixaDialogo.Fechar fechar = new CaixaDialogo.Fechar() {
+                dialogoConfirmacao.centralizar(larguraTela, alturaTela);
+                CaixaDialogo.Fechar callback = new CaixaDialogo.Fechar() {
                     public void aoFechar(boolean confirmou) {
                         if(confirmou) {
                             Gdx.app.log("INFO", "Usuario confirmou!");
@@ -91,40 +87,22 @@ public class TelaDemo implements Screen, InputProcessor {
                         }
                     }
                 };
-                dialogoConfirmacao.mostrar("Confirma?", "Deseja sair?", fechar);
+                dialogoConfirmacao.mostrar("Confirma?", "Deseja sair?", callback);
             }
         };
         Botao botaoDialogo = new Botao("Dialogo", visualBotao, fonte, 0, 0, 180, 50, escalaPixel, acaoDialogo);
         painelBotoes.addAncorado(botaoDialogo, Ancoragem.SUPERIOR_ESQUERDO, 0, 0);
-		
-        Acao acaoEntrada = new Acao() {
-            public void exec() {
-                // usa a posição da camera para centralizar corretamente
-                float centroX = camera.position.x;
-                float centroY = camera.position.y;
 
-                dialogoEntrada.x = centroX - dialogoEntrada.largura / 2;
-                dialogoEntrada.y = centroY - dialogoEntrada.altura / 2;
-				
-				CaixaDialogo.Fechar fechar = new CaixaDialogo.Fechar() {
-					@Override
-					public void aoFechar(boolean confirmou) {
-						if(confirmou) {
-							if(!campoNome.texto.equals("")) {
-								rotuloResposta.texto = campoNome.texto;
-							}
-						} else {
-							Gdx.app.log("INFO", "cancelado");
-							rotuloResposta.texto = "cancelou";
-						}
-					}
-				};
-                dialogoEntrada.mostrar("Nome", "", fechar);
+        Acao acaoInput = new Acao() {
+            public void exec() {
+                dialogoEntrada.centralizar(larguraTela, alturaTela);
+                dialogoEntrada.mostrar("Nome", "Digite:", null);
+				Gdx.input.setOnscreenKeyboardVisible(true);
             }
         };
 
-        Botao botaoEntrada = new Botao("Entrada", visualBotao, fonte, 0, 0, 180, 50, escalaPixel, acaoEntrada);
-        painelBotoes.addAncorado(botaoEntrada, Ancoragem.SUPERIOR_DIREITO, 0, 0);
+        Botao botaoInput = new Botao("Entrada", visualBotao, fonte, 0, 0, 180, 50, escalaPixel, acaoInput);
+        painelBotoes.addAncorado(botaoInput, Ancoragem.SUPERIOR_DIREITO, 0, 0);
 
         Acao acaoTeste = new Acao() {
             public void exec() {
@@ -161,15 +139,13 @@ public class TelaDemo implements Screen, InputProcessor {
         dialogoEntrada.largura = 500;
         dialogoEntrada.altura = 300;
 
-        // coordenadas relativas ao diálogo(não absolutas)
-        // o dialogo tem altura 300, então posiciona o campo a 120px do fundo
         campoNome = new CampoTexto(visualBotao, fonte, 50, 120, 400, 50, escalaPixel);
         campoNome.padrao = "Digite...";
         campoNome.limiteCaracteres = 20;
 
-		campoNome.mudanca = new CampoTexto.Texto() {
+			campoNome.mudanca = new CampoTexto.Texto() {
             public void aoMudar(String novoTexto) {
-                Gdx.app.log("ENTRADA", "Texto: " + novoTexto);
+                Gdx.app.log("INPUT", "Texto: " + novoTexto);
             }
         };
         dialogoEntrada.add(campoNome);
@@ -183,19 +159,18 @@ public class TelaDemo implements Screen, InputProcessor {
                 } else {
                     rotuloResposta.texto = "Vazio!";
                 }
-				dialogoEntrada.fechar(true);
+                dialogoEntrada.aoTocar(0, 0, false);
             }
         };
-        dialogoEntrada.addBotao("OK", visualBotao, Ancoragem.CENTRO_DIREITO, -10, acaoConfirmar);
+        dialogoEntrada.adicionarBotao("OK", visualBotao, Ancoragem.CENTRO_DIREITO, -10, acaoConfirmar);
 
         Acao acaoCancelar = new Acao() {
             public void exec() {
                 campoNome.texto = "";
                 rotuloResposta.texto = "Cancelado";
-				dialogoEntrada.fechar(false);
             }
         };
-        dialogoEntrada.addBotao("Cancelar", visualBotao, Ancoragem.CENTRO_ESQUERDO, 10, acaoCancelar);
+        dialogoEntrada.adicionarBotao("Cancel", visualBotao, Ancoragem.CENTRO_ESQUERDO, 10, acaoCancelar);
 
         gerenciadorUI.addDialogo(dialogoEntrada);
     }
