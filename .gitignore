@@ -1,4 +1,6 @@
-*.class
-*.apk
-bin/
-build/
+gdx-jogo/bin/
+gdx-jogo/build/
+gdx-jogo/gen/
+gdx-android/bin/
+gdx-android/build/
+gdx-android/gen/
