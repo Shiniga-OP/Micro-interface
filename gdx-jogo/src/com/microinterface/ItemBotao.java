@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-class ItemBotao extends Componente {
+public class ItemBotao extends Componente {
     public Rotulo rotulo;
     public Acao acao;
     public Texture pixelBranco;

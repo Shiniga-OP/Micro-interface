@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 /*
  * PainelRolavel, container com rolagem vertical quando o conteudo excede a altura visivel
@@ -27,6 +28,10 @@ public class PainelRolavel extends Painel {
     public float ultimoToqueY = 0;
     // textura para desenhar retangulos
     public Texture pixelBranco;
+	
+	public static final Vector3 auxiliar1 = new Vector3();
+	public static final Vector3 auxiliar2 = new Vector3();
+	
     // cria painel rolavel com fundo visual
     public PainelRolavel(PainelFatiado visual, float x, float y, float largura, float altura, float escala) {
         super(visual, x, y, largura, altura, escala);
@@ -188,12 +193,22 @@ public class PainelRolavel extends Painel {
 			pincel.setColor(corOriginal);
 		}
 		// 2. ativa o recorte
-		pincel.flush(); // desenha o que ta na fila antes de aplicar o corte
-		Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+		// convertendo as coordenadas do mundo para pixels da tela
+        auxiliar1.set(desenharX, desenharY, 0);
+        auxiliar1.mul(pincel.getProjectionMatrix()); // aplica a camera/escala
 
-		// define a area de corte(os numeros precisam ser inteiros)
-		// nota: o sistema de desenho da placa de video conta de baixo pra cima
-		Gdx.gl.glScissor((int)desenharX, (int)desenharY, (int)largura, (int)altura);
+        // pega a posição real na janela
+        float sX = ((auxiliar1.x + 1) / 2) * Gdx.graphics.getWidth();
+        float sY = ((auxiliar1.y + 1) / 2) * Gdx.graphics.getHeight();
+
+        auxiliar2.set(desenharX + largura, desenharY + altura, 0);
+        auxiliar2.mul(pincel.getProjectionMatrix());
+
+        float sLargura = (((auxiliar2.x + 1) / 2) * Gdx.graphics.getWidth()) - sX;
+        float sAltura = (((auxiliar2.y + 1) / 2) * Gdx.graphics.getHeight()) - sY;
+
+        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+        Gdx.gl.glScissor((int)sX, (int)sY, (int)sLargura, (int)sAltura);
 
 		// 3. desenha os itens internos com o deslocamento da rolagem
 		for(int i = 0; i < filhos.size(); i++) {
@@ -221,12 +236,6 @@ public class PainelRolavel extends Painel {
 			pincel.draw(pixelBranco, xBarra, yPuxador, larguraBarra, alturaPuxador);
 			pincel.setColor(Color.WHITE);
 		}
-	}
-	@Override
-	public void liberar() {
-		super.liberar();
-		pixelBranco.dispose();
-		
 	}
 }
 

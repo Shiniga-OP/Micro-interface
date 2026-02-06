@@ -50,7 +50,7 @@ public class Painel extends Componente {
     }
 
     // adiciona filho com ancoragem
-    public void addAncorado(Componente filho, Ancoragem ancoragem, float margemX, float margemY) {
+    public void addAncorado(Componente filho, Ancora ancoragem, float margemX, float margemY) {
         // calcula área disponível considerando padding
         float larguraDisponivel = largura - espacoEsquerda - espacoDireita;
         float alturaDisponivel = altura - espacoSuperior - espacoInferior;

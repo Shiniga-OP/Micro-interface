@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 // item de lista com indicador de selecao
-class ItemSelecao extends Componente {
+public class ItemSelecao extends Componente {
     public Rotulo rotulo;
     public Acao acao;
     public Texture pixelBranco;
